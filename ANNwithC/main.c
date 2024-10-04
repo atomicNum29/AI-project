@@ -1,76 +1,51 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
 #include <math.h>
-
-typedef float dtype;
-struct _MATRIX
-{
-    size_t row;
-    size_t col;
-    dtype **data;
-};
-typedef struct _MATRIX matrix;
-void set_matrix(matrix *mat, size_t row, size_t col);
-void del_matrix(matrix *mat);
-
-// 1 / ( 1 + e^(-x) )
-dtype sigmoid(dtype x);
-// res = A * B
-void matrix_multiplication(matrix res, matrix A, matrix B);
+#include "my_matrix.h"
 
 int main(int argc, char const *argv[])
 {
+    uint32_t Ar, Ac, Br, Bc;
+    uint32_t Cr, Cc;
+    scanf("%u%u%u%u", &Ar, &Ac, &Br, &Bc);
+    Cr = Ar;
+    Cc = Bc;
+
+    matrix A, B, C;
+    set_matrix(&A, Ar, Ac);
+    set_matrix(&B, Br, Bc);
+    set_matrix(&C, Cr, Cc);
+
+    for (size_t i = 0; i < Ar; i++)
+    {
+        for (size_t ii = 0; ii < Ac; ii++)
+        {
+            scanf("%f", &A.data[i][ii]);
+        }
+    }
+    for (size_t i = 0; i < Br; i++)
+    {
+        for (size_t ii = 0; ii < Bc; ii++)
+        {
+            scanf("%f", &B.data[i][ii]);
+        }
+    }
+
+    matrix_multiplication(&C, &A, &B);
+
+    for (size_t i = 0; i < Cr; i++)
+    {
+        for (size_t ii = 0; ii < Cc; ii++)
+        {
+            printf("%f%c", C.data[i][ii], ii == Cc - 1 ? '\n' : ' ');
+        }
+    }
+
+    del_matrix(&A);
+    del_matrix(&B);
+    del_matrix(&C);
 
     return 0;
-}
-
-// res = A * B
-void matrix_multiplication(matrix res, matrix A, matrix B)
-{
-    if (res.row < A.row || res.col < B.col)
-        perror("MAT MUL: 'res' is too small");
-    if (A.col != B.row)
-        perror("MAT MUL: matrix size error\n\tA.col != B.row");
-
-    for (size_t i = 0; i < A.row; i++)
-    {
-        for (size_t ii = 0; ii < B.col; ii++)
-        {
-            dtype tmp = 0;
-            for (size_t iii = 0; iii < A.col; iii++)
-            {
-                tmp += A.data[i][iii] * B.data[iii][ii];
-            }
-            res.data[i][ii] = tmp;
-        }
-    }
-
-    return;
-}
-
-dtype sigmoid(dtype x)
-{
-    return (1 / (1 + exp(-x)));
-}
-
-void set_matrix(matrix *mat, size_t row, size_t col)
-{
-    mat->row = row;
-    mat->col = col;
-    mat->data = (dtype **)malloc(sizeof(dtype) * row * col + sizeof(dtype *) * row);
-    for (size_t i = 0; i < row; i++)
-    {
-        mat->data[i] = (size_t)mat->data + sizeof(dtype *) * row + sizeof(dtype) * col * i;
-        for (size_t ii = 0; ii < col; ii++)
-        {
-            mat->data[i][ii] = 0;
-        }
-    }
-}
-
-void del_matrix(matrix *mat)
-{
-    free(mat->data);
-    mat->row = mat->col = 0;
-    return;
 }
