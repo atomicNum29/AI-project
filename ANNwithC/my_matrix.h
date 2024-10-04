@@ -6,8 +6,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include "my_datatype.h"
 
-typedef float dtype;
 struct _MATRIX
 {
     size_t row;
@@ -15,12 +15,21 @@ struct _MATRIX
     dtype **data;
 };
 typedef struct _MATRIX matrix;
-void set_matrix(matrix *mat, size_t row, size_t col);
-void del_matrix(matrix *mat);
 
-// 1 / ( 1 + e^(-x) )
-dtype sigmoid(dtype x);
+// set row & col, allocation data
+void init_matrix(matrix *mat, size_t row, size_t col);
+// free data
+void free_matrix(matrix *mat);
+// matrix copy ( dest <- orig )
+void copy_matrix(matrix *dest, matrix *orig);
 // res = A * B
-void matrix_multiplication(matrix *res, matrix *A, matrix *B);
+void multiply_matrix(matrix *res, matrix *A, matrix *B);
+// applies a func to each matrix element
+void map_matrix(matrix *mat, dtype (*func)(dtype));
+
+// input matrix via scanf
+void input_matrix(matrix *mat);
+// print matrix via printf
+void print_matrix(matrix *mat);
 
 #endif

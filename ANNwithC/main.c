@@ -3,59 +3,55 @@
 #include <stdint.h>
 #include <string.h>
 #include <math.h>
+#include "my_datatype.h"
 #include "my_matrix.h"
+#include "my_activ_func.h"
 
 int main(int argc, char const *argv[])
 {
-    uint32_t Ar, Ac, Br, Bc;
-    uint32_t Cr, Cc;
-    scanf("%u%u%u%u", &Ar, &Ac, &Br, &Bc);
-    Cr = Ar;
-    Cc = Bc;
+    uint32_t L = 0; // 레이어 수
+    scanf("%u", &L);
 
-    matrix A, B, C;
-    set_matrix(&A, Ar, Ac);
-    set_matrix(&B, Br, Bc);
-    set_matrix(&C, Cr, Cc);
+    // 레이어별 노드 수
+    uint32_t *numofNode = (uint32_t *)calloc(L + 1, sizeof(uint32_t));
+    numofNode[0] = 1;
+    for (size_t i = 1; i <= L; i++)
+        scanf("%u", &numofNode[i]);
 
-    for (size_t i = 0; i < Ar; i++)
+    matrix *weight_matrix = (matrix *)calloc(L, sizeof(matrix));
+    for (size_t i = 0; i < L; i++)
+        init_matrix(&weight_matrix[i], numofNode[i + 1], numofNode[i]);
+
+    for (size_t i = 0; i < L; i++)
     {
-        for (size_t ii = 0; ii < Ac; ii++)
-        {
-            scanf("%f", &A.data[i][ii]);
-        }
-    }
-    for (size_t i = 0; i < Br; i++)
-    {
-        for (size_t ii = 0; ii < Bc; ii++)
-        {
-            scanf("%f", &B.data[i][ii]);
-        }
+        input_matrix(&weight_matrix[i]);
     }
 
-    matrix_multiplication(&C, &A, &B);
+    matrix *y = (matrix *)calloc(L, sizeof(matrix));
+    for (size_t i = 0; i < L; i++)
+        init_matrix(&y[i], numofNode[i + 1], 1);
 
-    for (size_t i = 0; i < Cr; i++)
+    for (size_t i = 0; i < L; i++)
     {
-        for (size_t ii = 0; ii < Cc; ii++)
+        if (i == 0)
         {
-            printf("%f%c", C.data[i][ii], ii == Cc - 1 ? '\n' : ' ');
+            copy_matrix(&y[i], &weight_matrix[i]);
+            continue;
         }
+        multiply_matrix(&y[i], &weight_matrix[i], &y[i - 1]);
+        map_matrix(&y[i], sigmoid);
     }
 
-    printf("\n");
-    for (size_t i = 0; i < Cr; i++)
-    {
-        for (size_t ii = 0; ii < Cc; ii++)
-        {
-            C.data[i][ii] = sigmoid(C.data[i][ii]);
-            printf("%f%c", C.data[i][ii], ii == Cc - 1 ? '\n' : ' ');
-        }
-    }
+    print_matrix(&y[L - 1]);
 
-    del_matrix(&A);
-    del_matrix(&B);
-    del_matrix(&C);
+    // free
+    for (size_t i = 0; i < L; i++)
+        free_matrix(&y[i]);
+    free(y);
+    for (size_t i = 0; i < L; i++)
+        free_matrix(&weight_matrix[i]);
+    free(weight_matrix);
+    free(numofNode);
 
     return 0;
 }

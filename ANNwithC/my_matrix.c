@@ -1,7 +1,7 @@
 #include "my_matrix.h"
 
 // res = A * B
-void matrix_multiplication(matrix *res, matrix *A, matrix *B)
+void multiply_matrix(matrix *res, matrix *A, matrix *B)
 {
     if (res->row < A->row || res->col < B->col)
     {
@@ -30,12 +30,7 @@ void matrix_multiplication(matrix *res, matrix *A, matrix *B)
     return;
 }
 
-dtype sigmoid(dtype x)
-{
-    return (1 / (1 + exp(-x)));
-}
-
-void set_matrix(matrix *mat, size_t row, size_t col)
+void init_matrix(matrix *mat, size_t row, size_t col)
 {
     mat->row = row;
     mat->col = col;
@@ -55,10 +50,69 @@ void set_matrix(matrix *mat, size_t row, size_t col)
     return;
 }
 
-void del_matrix(matrix *mat)
+void free_matrix(matrix *mat)
 {
     free(mat->data);
     mat->data = NULL;
     mat->row = mat->col = 0;
+    return;
+}
+
+void copy_matrix(matrix *dest, matrix *orig)
+{
+    if (dest->row != orig->row || dest->col != orig->col)
+    {
+        fprintf(stderr, "Matrix copy error: sizeof(dest) is not equal sizeof(orig).\n");
+        fprintf(stderr, "(%zu, %zu) != (%zu, %zu)\n", dest->row, dest->col, orig->row, orig->col);
+        exit(-1);
+    }
+
+    for (size_t i = 0; i < orig->row; i++)
+    {
+        for (size_t ii = 0; ii < orig->col; ii++)
+        {
+            dest->data[i][ii] = orig->data[i][ii];
+        }
+    }
+
+    return;
+}
+
+void map_matrix(matrix *mat, dtype (*func)(dtype))
+{
+    for (size_t i = 0; i < mat->row; i++)
+    {
+        for (size_t ii = 0; ii < mat->col; ii++)
+        {
+            mat->data[i][ii] = func(mat->data[i][ii]);
+        }
+    }
+
+    return;
+}
+
+void input_matrix(matrix *mat)
+{
+    for (size_t i = 0; i < mat->row; i++)
+    {
+        for (size_t ii = 0; ii < mat->col; ii++)
+        {
+            scanf(DTYPE_FORMAT, &mat->data[i][ii]);
+        }
+    }
+
+    return;
+}
+
+void print_matrix(matrix *mat)
+{
+    for (size_t i = 0; i < mat->row; i++)
+    {
+        for (size_t ii = 0; ii < mat->col; ii++)
+        {
+            printf(DTYPE_FORMAT "%c", mat->data[i][ii], ii == mat->col ? '\n' : ' ');
+        }
+    }
+
     return;
 }
