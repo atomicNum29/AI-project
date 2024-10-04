@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 typedef float dtype;
@@ -9,6 +10,8 @@ struct _MATRIX
     dtype **data;
 };
 typedef struct _MATRIX matrix;
+void set_matrix(matrix *mat, size_t row, size_t col);
+void del_matrix(matrix *mat);
 
 // 1 / ( 1 + e^(-x) )
 dtype sigmoid(dtype x);
@@ -41,11 +44,33 @@ void matrix_multiplication(matrix res, matrix A, matrix B)
             res.data[i][ii] = tmp;
         }
     }
-    
+
     return;
 }
 
 dtype sigmoid(dtype x)
 {
     return (1 / (1 + exp(-x)));
+}
+
+void set_matrix(matrix *mat, size_t row, size_t col)
+{
+    mat->row = row;
+    mat->col = col;
+    mat->data = (dtype **)malloc(sizeof(dtype) * row * col + sizeof(dtype *) * row);
+    for (size_t i = 0; i < row; i++)
+    {
+        mat->data[i] = (size_t)mat->data + sizeof(dtype *) * row + sizeof(dtype) * col * i;
+        for (size_t ii = 0; ii < col; ii++)
+        {
+            mat->data[i][ii] = 0;
+        }
+    }
+}
+
+void del_matrix(matrix *mat)
+{
+    free(mat->data);
+    mat->row = mat->col = 0;
+    return;
 }
