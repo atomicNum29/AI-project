@@ -43,6 +43,16 @@ int main(int argc, char const *argv[])
         }
     }
 
+    printf("\n");
+    for (size_t i = 0; i < Cr; i++)
+    {
+        for (size_t ii = 0; ii < Cc; ii++)
+        {
+            C.data[i][ii] = sigmoid(C.data[i][ii]);
+            printf("%f%c", C.data[i][ii], ii == Cc - 1 ? '\n' : ' ');
+        }
+    }
+
     del_matrix(&A);
     del_matrix(&B);
     del_matrix(&C);
