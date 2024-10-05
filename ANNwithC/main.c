@@ -18,27 +18,31 @@ int main(int argc, char const *argv[])
     for (size_t i = 1; i <= L; i++)
         scanf("%u", &numofNode[i]);
 
+    // 레이어별 노드들의 가중치를 저장할 행렬
     matrix *weight_matrix = (matrix *)calloc(L, sizeof(matrix));
     for (size_t i = 0; i < L; i++)
         init_matrix(&weight_matrix[i], numofNode[i + 1], numofNode[i]);
 
+    // 행렬에 값을 입력함. w_11 w_21 w_12 w_22 순으로 입력 (노드1과 관련된 가중치가 1행)
     for (size_t i = 0; i < L; i++)
-    {
         input_matrix(&weight_matrix[i]);
-    }
 
+    // 각 레이어별 계산 결과를 저장할 공간
     matrix *y = (matrix *)calloc(L, sizeof(matrix));
     for (size_t i = 0; i < L; i++)
         init_matrix(&y[i], numofNode[i + 1], 1);
 
+    // 신경망 계산
     for (size_t i = 0; i < L; i++)
     {
-        if (i == 0)
+        if (i == 0) // 처음 레이어는 입력 레이어
         {
             copy_matrix(&y[i], &weight_matrix[i]);
             continue;
         }
+        // y = A*x
         multiply_matrix(&y[i], &weight_matrix[i], &y[i - 1]);
+        // h = sigmoid(y)
         map_matrix(&y[i], sigmoid);
     }
 
