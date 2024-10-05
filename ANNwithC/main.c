@@ -42,7 +42,7 @@ int main(int argc, char const *argv[])
         }
         // y = A*x
         multiply_matrix(&y[i], &weight_matrix[i], &y[i - 1]);
-        // h = sigmoid(y)
+        // y = sigmoid(y)
         map_matrix(&y[i], sigmoid);
     }
 
