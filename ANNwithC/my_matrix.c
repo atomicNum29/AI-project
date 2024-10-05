@@ -110,9 +110,10 @@ void print_matrix(matrix *mat)
     {
         for (size_t ii = 0; ii < mat->col; ii++)
         {
-            printf(DTYPE_FORMAT "%c", mat->data[i][ii], ii == mat->col ? '\n' : ' ');
+            printf(DTYPE_FORMAT "%c", mat->data[i][ii], ii == mat->col - 1 ? '\n' : ' ');
         }
     }
-
+    printf("\n");
+    
     return;
 }
