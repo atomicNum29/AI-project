@@ -44,6 +44,7 @@ int main(int argc, char const *argv[])
         multiply_matrix(&y[i], &weight_matrix[i], &y[i - 1]);
         // y = sigmoid(y)
         map_matrix(&y[i], sigmoid);
+        
         printf("Layer %zu:\n", i);
         print_matrix(&y[i]);
     }
