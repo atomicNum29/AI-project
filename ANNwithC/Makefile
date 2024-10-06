@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g
+CFLAGS = -g -MMD -MP
 
 CURRENT_DIR := $(shell pwd)
 SRC_DIR = $(CURRENT_DIR)
@@ -16,6 +16,9 @@ $(TARGET): $(OBJ_FILES)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+-include $(OBJ_FILES:.o=.d)
+
 clean:
-	rm -f %(OBJ_DIR)/*.o $(TARGET)
+	rm -f $(OBJ_DIR)/*.o $(TARGET)
+	rm -f $(BIN_DIR)/*.o $(TARGET)
 
