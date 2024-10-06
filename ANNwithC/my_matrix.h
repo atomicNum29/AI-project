@@ -1,3 +1,6 @@
+// my_matrix.h
+// 행렬 자료형과 행렬 연산 함수들을 선언하기 위한 헤더파일
+
 #ifndef __MY_MATRIX_H__
 #define __MY_MATRIX_H__
 
