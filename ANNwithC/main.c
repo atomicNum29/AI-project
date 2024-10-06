@@ -44,6 +44,7 @@ int main(int argc, char const *argv[])
         multiply_matrix(&y[i], &weight_matrix[i], &y[i - 1]);
         // y = sigmoid(y)
         map_matrix(&y[i], sigmoid);
+        print_matrix(&y[i]);
     }
 
     print_matrix(&y[L - 1]);
