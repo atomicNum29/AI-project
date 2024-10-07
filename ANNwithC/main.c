@@ -33,18 +33,14 @@ int main(int argc, char const *argv[])
         init_matrix(&y[i], numofNode[i + 1], 1);
 
     // 신경망 계산
-    for (size_t i = 0; i < L; i++)
+    copy_matrix(&y[0], &weight_matrix[0]); // 처음 레이어는 입력 레이어
+    for (size_t i = 1; i < L; i++)
     {
-        if (i == 0) // 처음 레이어는 입력 레이어
-        {
-            copy_matrix(&y[i], &weight_matrix[i]);
-            continue;
-        }
         // y = A*x
         multiply_matrix(&y[i], &weight_matrix[i], &y[i - 1]);
         // y = sigmoid(y)
         map_matrix(&y[i], sigmoid);
-        
+
         printf("Layer %zu:\n", i);
         print_matrix(&y[i]);
     }
