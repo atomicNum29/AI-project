@@ -31,7 +31,7 @@ void multiply_matrix(matrix *res, matrix *A, matrix *B);
 void map_matrix(matrix *mat, dtype (*func)(dtype));
 
 // input matrix via scanf
-void input_matrix(matrix *mat);
+void input_matrix(matrix *mat, FILE *data);
 // print matrix via printf
 void print_matrix(matrix *mat);
 

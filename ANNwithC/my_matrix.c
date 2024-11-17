@@ -91,13 +91,13 @@ void map_matrix(matrix *mat, dtype (*func)(dtype))
     return;
 }
 
-void input_matrix(matrix *mat)
+void input_matrix(matrix *mat, FILE *data)
 {
     for (size_t i = 0; i < mat->row; i++)
     {
         for (size_t ii = 0; ii < mat->col; ii++)
         {
-            scanf(DTYPE_FORMAT, &mat->data[i][ii]);
+            fscanf(data, DTYPE_FORMAT, &mat->data[i][ii]);
         }
     }
 
