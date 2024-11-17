@@ -4,7 +4,12 @@
 #ifndef __MY_DATATYPE_H__
 #define __MY_DATATYPE_H__
 
+#ifdef USE_FLOAT
 typedef float dtype;
 #define DTYPE_FORMAT "%f"
+#else
+typedef double dtype;
+#define DTYPE_FORMAT "%lf"
+#endif
 
 #endif
