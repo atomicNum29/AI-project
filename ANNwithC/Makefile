@@ -8,9 +8,9 @@ CURRENT_DIR := $(shell pwd)
 # 소스파일 디렉토리
 SRC_DIR = $(CURRENT_DIR)
 # obj파일 디렉토리
-OBJ_DIR = $(CURRENT_DIR)/../.execFiles/obj
+OBJ_DIR = $(CURRENT_DIR)/obj
 # 실행파일 디렉토리
-BIN_DIR = $(CURRENT_DIR)/../.execFiles/bin
+BIN_DIR = $(CURRENT_DIR)/bin
 
 # 소스파일 디렉토리의 모든 .c 파일
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
@@ -21,10 +21,12 @@ TARGET = $(BIN_DIR)/main
 
 # 타겟의 의존성은 모든 obj파일에 있음
 $(TARGET): $(OBJ_FILES)
+	@mkdir -p $(BIN_DIR)  # 실행파일 디렉토리 생성
 	$(CC) $(CFLAGS) -o $@ $^
 
 # 모든 .c 파일로 obj파일을 생성함
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)  # obj 디렉토리 생성
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # 헤더파일 의존성 규칙을 포함
