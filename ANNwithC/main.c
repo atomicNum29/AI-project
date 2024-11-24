@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 {
     // ann initialize
     ann A = {0};
-    FILE *fp = fopen("/Users/bagsiu/Downloads/INU/2024-2/AI-project/.execFiles/ioFile/input.txt", "r");
+    FILE *fp = fopen("ANNwithC/bin/input.txt", "r");
     init_ann(&A, fp);
 
     // 신경망 계산
