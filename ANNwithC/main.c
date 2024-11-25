@@ -15,21 +15,11 @@ int main(int argc, char const *argv[])
     FILE *fp = fopen("ANNwithC/bin/input.txt", "r");
     init_ann(&A, fp);
 
-    // 신경망 계산
-    copy_matrix(&A.y[0], &A.weight_matrix[0]); // 처음 레이어는 입력 레이어
-    for (size_t i = 1; i < A.layer; i++)
-    {
-        // y = A*x
-        multiply_matrix(&A.y[i], &A.weight_matrix[i], &A.y[i - 1]);
-        // y = sigmoid(y)
-        map_matrix(&A.y[i], sigmoid);
+    // 신경망 순전파 계산
+    forward_propagation(&A);
 
-        printf("Layer %zu:\n", i);
-        print_matrix(&A.y[i]);
-    }
-
-    printf("output:\n");
-    print_matrix(&A.y[A.layer - 1]);
+    // 신경망 순전파 결과 출력
+    print_layers(&A);
 
     // free
     free_ann(&A);

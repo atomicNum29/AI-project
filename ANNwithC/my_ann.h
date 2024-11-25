@@ -29,6 +29,12 @@ typedef struct _ANN ann;
 // 신경망에 대한 정보가 저장된 파일을 읽고, 신경망을 세팅하는 함수
 int init_ann(ann *A, FILE *data);
 
+// 신경망 순전파
+void forward_propagation(ann *A);
+
+// 연산 결과 출력
+void print_layers(ann *A);
+
 // 신경망에 할당한 공간들을 반환하는 함수
 void free_ann(ann *A);
 
